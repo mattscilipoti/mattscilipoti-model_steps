@@ -1,5 +1,5 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__) + '/../../lib')
-require 'mattscilipoti-model_steps'
+#require 'model_steps/step_definitions'
 
 require 'micronaut/expectations'
 

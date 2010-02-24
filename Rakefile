@@ -5,12 +5,12 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "mattscilipoti-model_steps"
-    gem.summary = %Q{TODO: one-line summary of your gem}
-    gem.description = %Q{TODO: longer description of your gem}
+    gem.summary = %Q{Model Steps for cucumber}
+    gem.description = %Q{Model Steps for cucumber}
     gem.email = "matt@scilipoti.name"
     gem.homepage = "http://github.com/mattscilipoti/mattscilipoti-model_steps"
     gem.authors = ["Matt Scilipoti"]
-    gem.add_development_dependency "spicycode-micronaut"
+    gem.add_development_dependency "micronaut"
     gem.add_development_dependency "cucumber"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
   end
@@ -20,7 +20,7 @@ rescue LoadError
 end
 
 require 'micronaut/rake_task'
-Micronaut::RakeTask.new(examples) do |examples|
+Micronaut::RakeTask.new(:examples) do |examples|
   examples.pattern = 'examples/**/*_example.rb'
   examples.ruby_opts << '-Ilib -Iexamples'
 end
