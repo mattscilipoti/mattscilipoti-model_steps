@@ -386,17 +386,38 @@ end
 #end
 
 #Then Location:L1 should have the following Pings
+#Or
+#Then Location:L1 should have these attributes
 #Works against actual models (instead of view)
 #Verifies model count and each method in each row.
 #Assumes:
 # * Header = method name
 # * the first column in each row is the default identifier for that row.
-Then /^(\w+):(.+) should have (?:these|the following|this) (.+):$/ do |requested_model, default_identifier, association, table|
+Then /^(\w+):(.+) (?!.not|NOT)should have (?:these|the following) (.+):$/ do |requested_model, default_identifier, association, table|
+  # table is a Cucumber::Ast::Table
+  model_under_test = requested_model_with_identifier_to_model_instance(requested_model, default_identifier)
+  if association == 'attributes'
+    table.hashes.first.each do |attribute, expected_value|
+      model_under_test.send(attribute).to_s.should == expected_value
+    end
+  else
+    associated_models = model_under_test.send(association.underscore)
+    assert_models(associated_models, table)
+  end
+end
+
+Then /^(\w+):(.+) should (?:not|NOT) have (?:these|the following) (.+):$/ do |requested_model, default_identifier, association, table|
   # table is a Cucumber::Ast::Table
   model_under_test = requested_model_with_identifier_to_model_instance(requested_model, default_identifier)
 
-  associated_models = model_under_test.send(association.underscore)
-  assert_models(table, associated_models)
+  if association == 'attributes'
+    table.hashes.first.each do |attribute, expected_value|
+      model_under_test.send(attribute).to_s.should_not == expected_value
+    end
+  else
+    associated_models = model_under_test.send(association.underscore)
+    assert_models(associated_models, table, :should_not)
+  end
 end
 
 #Then ModelA should have 1 ModelB
