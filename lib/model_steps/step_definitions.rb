@@ -1,6 +1,6 @@
 Cucumber::Ast::Table.class_eval do
   def is_date_column?(column_name)
-    column_name.columnify =~ /( at|_at|time|date)$/
+    column_name.columnify =~ /( at|_at|time|date)$/i
   end
 
   def chronic_parsable_columns
@@ -711,7 +711,7 @@ def requested_params_to_model_params(requested_params, model)
   association_names = model.reflect_on_all_associations.collect &:name
 
   mapped_params = {}
-  requested_params.each {|header, value| mapped_params[header.columnify] = value}
+  requested_params.each {|header, value| mapped_params[header] = value}
 
   association_params = mapped_params.reject { |param_name, value| !association_names.include?(ModelSteps::Inflector.param_to_association_name(param_name)) }
   association_params.each do |param_name, value|
