@@ -589,7 +589,7 @@ def map_table_header(header)
   #TODO: associations should be underscore'd
 #  mapped_header = header.columnify
   mapped_header = header
-  mapped_header.sub!('#', 'Number')
+#  mapped_header.sub!('#', 'Number')
   case header
     when 'printer'
       mapped_header = 'printer_prefix'
