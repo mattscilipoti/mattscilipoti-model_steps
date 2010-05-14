@@ -362,7 +362,7 @@ Then /^(?:these|this|the following) (.+) should exist:$/ do |requested_model, ta
   model_klass = requested_model_to_model(requested_model)
 
   models_to_verify = requested_models(requested_model)
-  assert_models(table, models_to_verify)
+  assert_models(models_to_verify, table)
 end
 
 Then /^there should be (\d*) (.*)$/ do |cnt, requested_model|
@@ -428,13 +428,16 @@ private
 #Assumes:
 # * Header = method name
 # * the first column in each row is the default identifier for that row.
-def assert_models(table, *expected_models)
-  expected_models.flatten!
-  model_klass = expected_models.first && expected_models.first.class.base_class rescue expected_models.first.class #support non-AR models
+def assert_models(expected_models, table, should_not = false)
+  model_klass = expected_models.first && expected_models.first.class.base_class rescue expected_models.first.class
 
   map_table_columns!(table)
   rows = map_table_headers(table).hashes
-  expected_models.count.should == rows.size
+  if should_not
+    expected_models.count.should_not == rows.size
+  else
+    expected_models.count.should == rows.size
+  end
 
   first_column_name = table.headers[0]
 
@@ -446,25 +449,29 @@ def assert_models(table, *expected_models)
     #find the model for this row
     model_under_test = expected_models.detect {|model| model.send(first_column_name).to_s == default_identifier }
 
-    #compare model with expectations
-    requested_params.each do |attribute_name, expected_value|
-      actual = model_under_test.send(attribute_name)
-      if actual.is_a?(ActiveRecord::Base)
-        #if AR model, compare against value of default_identifier_column
-        actual = actual.send(actual.class.default_identifier_column)
-      end
+    unless should_not
+      model_under_test.should_not be_nil
+    end if
 
-      err_msg = "Expected ##{attribute_name} for '#{model_klass.name}:#{default_identifier}'\n\t  to be: '#{expected_value}'\n\tbut was: '#{actual}'\n * Expectations: #{requested_params.inspect} \n * #{model_klass.name}:#{default_identifier}: #{model_under_test.inspect}.\n\n"
-      if expected_value =~ /[*]/ #has wild card
-        expected_value = expected_value.gsub('*', '.*')
-        actual.to_s.should match(expected_value), err_msg
-      else
-        actual.to_s.should eql(expected_value.to_s), err_msg
+    if model_under_test
+      #compare model with expectations
+      requested_params.each do |attribute_name, expected_value|
+        actual = model_under_test.send(attribute_name)
+        if actual.is_a?(ActiveRecord::Base)
+          actual = actual.send(actual.class.default_identifier_column)
+        end
+        if should_not
+          err_msg = "Expected ##{attribute_name} for '#{model_klass.name}:#{default_identifier}'\n\t  to NOT have: '#{expected_value}'\n\tbut was: '#{actual}'\n * Expectations: #{requested_params.inspect} \n * #{model_klass.name}:#{default_identifier}: #{model_under_test.inspect}.\n\n"
+          actual.to_s.should_not eql(expected_value), err_msg
+        else
+          err_msg = "Expected ##{attribute_name} for '#{model_klass.name}:#{default_identifier}'\n\t  to be: '#{expected_value}'\n\tbut was: '#{actual}'\n * Expectations: #{requested_params.inspect} \n * #{model_klass.name}:#{default_identifier}: #{model_under_test.inspect}.\n\n"
+          actual.to_s.should eql(expected_value), err_msg
+        end
       end
-
     end
   end
 end
+
 
 def requested_model_with_identifier_to_model_instance(requested_model, default_identifier)
   model = requested_model_to_model(requested_model)
