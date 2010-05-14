@@ -89,7 +89,7 @@ Given /^(?:these|this|the following) (?!.*should)(.+) exist:$/ do |requested_mod
 
     model_params = requested_params_to_model_params(requested_params, model)
 
-    model_under_test = Factory.create(model_to_factory_symbol(model.name), model_params)
+    model_under_test = Factory.create(model_to_factory_symbol(requested_model), model_params)
 
     model_under_test
   end
