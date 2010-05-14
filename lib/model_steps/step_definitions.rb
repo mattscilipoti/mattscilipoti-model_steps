@@ -55,7 +55,7 @@ Then /^I should see (\d+) (\D+)$/ do |expected_count, requested_model|
 
 end
 
-Then /^I should see (?:these|the following) (\D+):$/ do |requested_model, table|
+Then /^I should see (?:these|this|the following) (\D+):$/ do |requested_model, table|
   # table is a Cucumber::Ast::Table
   table.map_chronic_columns!
   #WORKAROUND: why does table.diff! expect Trouble to be nil (vs. '')?
@@ -76,7 +76,7 @@ end
 #Given the following Camera Events exist:
 #Note: use ((?!.*should) to avoid conflicts with
 #  Given the following Camera Events should exist:
-Given /^(?:these|the following) (?!.*should)(.+) exist:$/ do |requested_model, table|
+Given /^(?:these|this|the following) (?!.*should)(.+) exist:$/ do |requested_model, table|
 
   # table is a Cucumber::Ast::Table
   model = requested_model_to_model(requested_model)
@@ -167,7 +167,7 @@ end
 #Given ModelA has the following existing ModelB's (see table)
 # Finds the ModelB's which match the conditions
 #  And assigns themto ModelA.association
-Given /^(\D+):(.+) has (?:these|the following) existing (\D+):$/ do |requested_model, default_identifier, requested_association_name, table|
+Given /^(\D+):(.+) has (?:these|this|the following) existing (\D+):$/ do |requested_model, default_identifier, requested_association_name, table|
   association_quantity = table.rows.size
 
   map_table_columns!(table)
@@ -366,7 +366,7 @@ end
 #Assumes:
 # * Header = method name
 # * the first column in each row is the default identifier for that row.
-Then /^(?:these|the following) (.+) should exist:$/ do |requested_model, table|
+Then /^(?:these|this|the following) (.+) should exist:$/ do |requested_model, table|
   # table is a Cucumber::Ast::Table
   model_klass = requested_model_to_model(requested_model)
 
@@ -393,7 +393,7 @@ end
 #Assumes:
 # * Header = method name
 # * the first column in each row is the default identifier for that row.
-Then /^(\w+):(.+) (?!.not|NOT)should have (?:these|the following) (.+):$/ do |requested_model, default_identifier, association, table|
+Then /^(\w+):(.+) (?!.not|NOT)should have (?:these|this|the following) (.+):$/ do |requested_model, default_identifier, association, table|
   # table is a Cucumber::Ast::Table
   model_under_test = requested_model_with_identifier_to_model_instance(requested_model, default_identifier)
   if association == 'attributes'
@@ -406,7 +406,7 @@ Then /^(\w+):(.+) (?!.not|NOT)should have (?:these|the following) (.+):$/ do |re
   end
 end
 
-Then /^(\w+):(.+) should (?:not|NOT) have (?:these|the following) (.+):$/ do |requested_model, default_identifier, association, table|
+Then /^(\w+):(.+) should (?:not|NOT) have (?:these|this|the following) (.+):$/ do |requested_model, default_identifier, association, table|
   # table is a Cucumber::Ast::Table
   model_under_test = requested_model_with_identifier_to_model_instance(requested_model, default_identifier)
 
