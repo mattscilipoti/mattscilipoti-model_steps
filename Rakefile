@@ -6,7 +6,7 @@ begin
   Jeweler::Tasks.new do |gem|
     gem.name = "mattscilipoti-model_steps"
     gem.summary = %Q{Model Steps for cucumber}
-    gem.description = %Q{Model Steps for cucumber}
+    gem.description = %Q{Step Definitions for cucumber which support ActiveRecord Models}
     gem.email = "matt@scilipoti.name"
     gem.homepage = "http://github.com/mattscilipoti/mattscilipoti-model_steps"
     gem.authors = ["Matt Scilipoti"]
