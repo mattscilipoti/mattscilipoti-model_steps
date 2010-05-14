@@ -91,15 +91,6 @@ Given /^(?:these|this|the following) (?!.*should)(.+) exist:$/ do |requested_mod
 
     model_under_test = Factory.create(model_to_factory_symbol(model.name), model_params)
 
-    if model_under_test.is_a?(ImportSession)
-      Traffipax.deprecated("special fixture code for 'the following Import Sessions exist'", 'only until ImportSession no longer has ImportSteps') unless ImportSession.new.respond_to?('import_steps')
-      trouble = model_params[:trouble]
-      #ensure last step has proper status
-      #TODO: this is a smell.  We are bypassing proper operation.  Is this test appropriate?
-      model_under_test.current_step.update_attributes!(:started_at => model_under_test.started_at, :completed_at => model_under_test.completed_at)
-      model_under_test.current_step.trouble = trouble if trouble
-    end
-
     model_under_test
   end
 
