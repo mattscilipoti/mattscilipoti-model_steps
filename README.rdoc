@@ -1,7 +1,73 @@
 = mattscilipoti-model_steps
 
-Description goes here.
+Attempt to answer 4 needs:
+1. Support creation of models with attributes
+2. Uniquely identify models in cucumber steps
+3. Reference associated models
+4. Support factory derivations i.e. user_admin, user_manager
 
+Attempt:
+
+
+Assume: 
+  User belongs_to Role
+  User has_many Courses
+  Course belongs_to Topic
+  User has_friendly_id :name
+  
+Note: it is dependent on firendly_id: http://github.com/norman/friendly_id
+
+1. Support creation of models with attributes
+  Given these Users exist:
+    |login  |first_name |last_name |
+    |tester |joe        |tester    |
+    |anon   |John       |Doe       |
+    * only one row is required.  Works the same for one, or more, rows.
+    
+  This will call:
+    Factory(:user, :login => 'tester', :first_name => 'joe', :last_name => 'tester')
+    Factory(:user, :login => 'anon', :first_name => 'John', :last_name => 'Doe')
+    
+1. Uniquely identify models in cucumber steps
+  Model:friendly_id
+  User:Matt
+  
+  Possible options:
+    User:"Matt"
+    User|matt
+    
+2. Reference associated models
+  A. utilize associations in tables
+    Given these people exist:
+    |name |role |
+    |Matt |Admin|
+  
+  This will identify that 'role' is an association and perform the equivalent of:
+     Role.find_by_name('Admin') || Factory(:role, :name => 'Admin') #using Factory(:role, Topic.friendly_column_name => 'Admin')
+
+  B. ModelA has many ModelBs
+    Given User:Matt has these Courses:
+      |name  |topic   |
+      |B101  |Biology |
+      |CS101 |CompSci |
+    
+    Executes:  
+      Factory(:user, :course => :name => 'B101', :topic => Topic.find('Biology') || Factory(:topic, Topic.friendly_column_name => 'biology'))
+      Factory(:user, :course => :name => 'CS101', :topic => Topic.find('CompSci'))
+      
+3. Support factory derivations i.e. user_admin, user_manager
+  Given this User(Admin) exists:
+    |first_name |
+    |Jane       |
+    
+  Executes:
+    Factory(:user_admin, :name => 'Jane')
+
+  Given a User(with associations) exists
+  
+  Executes:
+    Factory(:user_with_associations)
+  
 == Note on Patches/Pull Requests
 
 * Fork the project.
