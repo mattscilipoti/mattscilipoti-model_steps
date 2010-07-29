@@ -1,6 +1,6 @@
 Cucumber::Ast::Table.class_eval do
   def is_date_column?(column_name)
-    column_name.columnify =~ /( at|_at|time|date)$/i
+    column_name =~ /( at|_at|time|date)$/i
   end
 
   def chronic_parsable_columns
