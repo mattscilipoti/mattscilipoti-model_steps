@@ -100,7 +100,7 @@ end
 # Create a new ModelA with default_identifier_column = default_identifier
 Given /^(.+):(.+) exists$/ do |requested_model, default_identifier|
   model = requested_model_to_model(requested_model)
-  column_name = model.default_identifier_column
+  column_name = model.friendly_id_config.column
   Factory.create(model_to_factory_symbol(requested_model), column_name => default_identifier)
 end
 
@@ -129,7 +129,7 @@ Given /^(\D+):(.+) has (\D+):(.+)$/ do |requested_model, default_identifier, ass
   model_under_test = requested_model_with_identifier_to_model_instance(requested_model, default_identifier)
   associated_model = requested_model_to_model(association_model_name)
   factory_name = model_to_factory_symbol(associated_model)
-  associated_model_under_test = associated_model.find_by_default_identifier(default_identifier) || Factory(factory_name, associated_model.default_identifier_column => default_identifier)
+  associated_model_under_test = associated_model.find(default_identifier) || Factory(factory_name, associated_model.friendly_id_config.column => default_identifier)
 
   possible_associations = [association_model_name.underscore, association_model_name.pluralize.underscore]
   association_name = possible_associations.detect {|association_name| model_under_test.respond_to?(association_name)}
@@ -232,7 +232,7 @@ end
 Given /^(\D+):(.+) does not exist$/ do |requested_model, default_identifier|
   begin
     model = requested_model_to_model(requested_model)
-    instance = model.find_by_default_identifier(default_identifier)
+    instance = model.find(default_identifier)
     if instance
       instance.destroy if instance
       instance.reload.should be_nil
@@ -307,7 +307,7 @@ When /^we setup the following:$/ do |table|
 
       factory_name = model_to_factory_symbol(header)
       model_klass = header.classify.constantize
-      new_model = model_klass.find_by_default_identifier(value)
+      new_model = model_klass.find(value)
 
       new_model_params = {}
       if previous_model
@@ -325,7 +325,7 @@ When /^we setup the following:$/ do |table|
       if new_model
         new_model.update_attributes! new_model_params
       else
-        new_model_params.merge!({ model_klass.default_identifier_column => value })
+        new_model_params.merge!({ model_klass.friendly_id_config.column => value })
         new_model = Factory.create(factory_name, new_model_params)
       end
 
@@ -458,7 +458,7 @@ def assert_models(expected_models, table, should_not = false)
       requested_params.each do |attribute_name, expected_value|
         actual = model_under_test.send(attribute_name)
         if actual.is_a?(ActiveRecord::Base)
-          actual = actual.send(actual.class.default_identifier_column)
+          actual = actual.send(actual.class.friendly_id_config.column)
         end
         if should_not
           err_msg = "Expected ##{attribute_name} for '#{model_klass.name}:#{default_identifier}'\n\t  to NOT have: '#{expected_value}'\n\tbut was: '#{actual}'\n * Expectations: #{requested_params.inspect} \n * #{model_klass.name}:#{default_identifier}: #{model_under_test.inspect}.\n\n"
@@ -475,11 +475,11 @@ end
 
 def requested_model_with_identifier_to_model_instance(requested_model, default_identifier)
   model = requested_model_to_model(requested_model)
-  model_under_test = model.find_by_default_identifier!(default_identifier)
+  model_under_test = model.find(default_identifier)
   return model_under_test
 rescue ActiveRecord::RecordNotFound
   factory_name = model_to_factory_symbol(requested_model)
-  Factory.create(factory_name, model.default_identifier_column => default_identifier)
+  Factory.create(factory_name, model.friendly_id_config.column => default_identifier)
 end
 
 def assign_requested_model_associations(model_under_test, association_quantity, requested_association_name, array_of_requested_params = [])
@@ -497,7 +497,7 @@ def assign_requested_model_associations(model_under_test, association_quantity, 
   existing_objects = array_of_requested_params.collect do |conditions|
     if conditions.keys.first == 'default_identifier'
       #for CameraEvent find by (ImportFile).name
-      association_model.find_by_default_identifier(conditions.values.first)
+      association_model.find(conditions.values.first)
     else
       association_model.find(:first, :conditions => conditions)
     end
@@ -682,7 +682,7 @@ end
 
 
 def perform_activity(model, default_identifier, requested_activity)
-  model_under_test = model.find_by_default_identifier(default_identifier)
+  model_under_test = model.find(default_identifier)
   activity = model_under_test.send("do#{requested_activity.singularize}".underscore)
 end
 
@@ -727,7 +727,7 @@ def requested_params_to_model_params(requested_params, model)
       default_identifier = value
     end
 
-    associated_model = associated_model_class_name.constantize.find_by_default_identifier(default_identifier)
+    associated_model = associated_model_class_name.constantize.find(default_identifier)
 
     # TODO handle multiple associations
     if /s$/ =~ association_name
