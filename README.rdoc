@@ -1,5 +1,7 @@
 = mattscilipoti-model_steps
 
+
+
 Attempt to answer 4 needs:
 1. Support creation of models with attributes
 2. Uniquely identify models in cucumber steps
@@ -10,12 +12,15 @@ Attempt:
 
 
 Assume: 
-  User belongs_to Role
+  User belongs_to Organization
   User has_many Courses
   Course belongs_to Topic
-  User has_friendly_id :name
+  User has_friendly_id :login
+
+  Note: it is dependent on friendly_id: http://github.com/norman/friendly_id
   
-Note: it is dependent on firendly_id: http://github.com/norman/friendly_id
+General:  a step that ends in colon (:) expects a cucumber table.
+  
 
 1. Support creation of models with attributes
   Given these Users exist:
@@ -28,6 +33,21 @@ Note: it is dependent on firendly_id: http://github.com/norman/friendly_id
     Factory(:user, :login => 'tester', :first_name => 'joe', :last_name => 'tester')
     Factory(:user, :login => 'anon', :first_name => 'John', :last_name => 'Doe')
     
+  Comparison:
+  pickle:
+    Single:    
+       Given a user exists with login: "tester", first_name: "joe", last_name: "tester"
+       
+    Multiple:
+    Given the following Users exist
+      |login  |first_name |last_name |
+      |tester |joe        |tester    |
+      |anon   |John       |Doe       |
+  
+  factory_girl:
+    Given
+    
+    
 1. Uniquely identify models in cucumber steps
   Model:friendly_id
   User:Matt
@@ -39,8 +59,8 @@ Note: it is dependent on firendly_id: http://github.com/norman/friendly_id
 2. Reference associated models
   A. utilize associations in tables
     Given these people exist:
-    |name |role |
-    |Matt |Admin|
+    |name |organization |
+    |Matt |Dept. A|
   
   This will identify that 'role' is an association and perform the equivalent of:
      Role.find_by_name('Admin') || Factory(:role, :name => 'Admin') #using Factory(:role, Topic.friendly_column_name => 'Admin')
