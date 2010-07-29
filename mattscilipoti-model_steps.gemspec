@@ -29,7 +29,8 @@ Gem::Specification.new do |s|
      "features/step_definitions/mattscilipoti-model_steps_steps.rb",
      "features/support/env.rb",
      "lib/mattscilipoti-model_steps.rb",
-     "lib/model_steps/step_definitions.rb"
+     "lib/model_steps/step_definitions.rb",
+     "mattscilipoti-model_steps.gemspec"
   ]
   s.homepage = %q{http://github.com/mattscilipoti/mattscilipoti-model_steps}
   s.rdoc_options = ["--charset=UTF-8"]
