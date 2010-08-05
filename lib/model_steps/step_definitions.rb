@@ -67,6 +67,7 @@ Then /^I should see (?:these|this|the following) (\D+):$/ do |requested_model, t
 
   css_class = requested_table.pluralize.underscore
 
+  #TODO: yell if table does not exist
   html_table = table(tableish("table.#{css_class} tr", 'td,th'))
 
   mapped_table.diff!(html_table)
@@ -129,8 +130,13 @@ Given /^(\D+):(.+) has (\D+):(.+)$/ do |requested_model, default_identifier, ass
   model_under_test = requested_model_with_identifier_to_model_instance(requested_model, default_identifier)
   associated_model = requested_model_to_model(association_model_name)
   factory_name = model_to_factory_symbol(associated_model)
-  associated_model_under_test = associated_model.find(default_identifier) || Factory(factory_name, associated_model.friendly_id_config.column => default_identifier)
+  # associated_model_under_test = associated_model.find(default_identifier) || Factory(factory_name, associated_model.friendly_id_config.column => default_identifier)
 
+  begin
+    associated_model_under_test = associated_model.find(associated_model_default_identifier)
+  rescue ActiveRecord::RecordNotFound
+    associated_model_under_test = Factory(factory_name, associated_model.friendly_id_config.column => associated_model_default_identifier)
+  end
   possible_associations = [association_model_name.underscore, association_model_name.pluralize.underscore]
   association_name = possible_associations.detect {|association_name| model_under_test.respond_to?(association_name)}
 
