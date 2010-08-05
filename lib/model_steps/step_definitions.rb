@@ -130,28 +130,22 @@ Given /^(\D+):(.+) has (\D+):(.+)$/ do |requested_model, default_identifier, ass
   model_under_test = requested_model_with_identifier_to_model_instance(requested_model, default_identifier)
   associated_model = requested_model_to_model(association_model_name)
   factory_name = model_to_factory_symbol(associated_model)
-  # associated_model_under_test = associated_model.find(default_identifier) || Factory(factory_name, associated_model.friendly_id_config.column => default_identifier)
+
+  parent = model_under_test.class.name.underscore
+
+  parent_association = associated_model.instance_methods.include?(parent.pluralize) ?
+          {parent.pluralize => [model_under_test]} :
+          {parent => model_under_test}
 
   begin
     associated_model_under_test = associated_model.find(associated_model_default_identifier)
+    associated_model_under_test.update_attributes!(parent_association)
   rescue ActiveRecord::RecordNotFound
-    associated_model_under_test = Factory(factory_name, associated_model.friendly_id_config.column => associated_model_default_identifier)
+    associated_model_params = { associated_model.friendly_id_config.column => associated_model_default_identifier}.merge(parent_association)
+    associated_model_under_test = Factory(factory_name, associated_model_params)
   end
-  possible_associations = [association_model_name.underscore, association_model_name.pluralize.underscore]
-  association_name = possible_associations.detect {|association_name| model_under_test.respond_to?(association_name)}
 
-  if association_name
-    if association_name.pluralize == association_name
-      associated_items = model_under_test.send(association_name)
-      associated_items << associated_model_under_test
-    else
-      model_under_test.send(association_name + '=', associated_model_under_test)
-    end
-    model_under_test.save!
-
-  else
-    raise "Neither of these associations exist for #{model_under_test.class.name}: #{possible_associations.inspect}"
-  end
+  model_under_test
 end
 
 Given /^(.+):(.+) (?:has|had) (?:these|this|the following) attributes:$/ do |requested_model, default_identifier, table|
@@ -569,7 +563,7 @@ def create_requested_model_associations(model_under_test, association_quantity, 
     if scope
       associated_models = associated_models.send(scope)
     end
-    
+
     #TODO: smoke test
   end
 end
