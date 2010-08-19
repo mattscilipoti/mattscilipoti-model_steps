@@ -475,7 +475,7 @@ end
 
 def requested_model_with_identifier_to_model_instance(requested_model, default_identifier)
   model = requested_model_to_model(requested_model)
-  model_under_test = model.find(default_identifier)
+  model_under_test = model.find(default_identifier.slugify) #friendly_id only finds by name and slug (if use_slug?)
   return model_under_test
 rescue ActiveRecord::RecordNotFound
   factory_name = model_to_factory_symbol(requested_model)
