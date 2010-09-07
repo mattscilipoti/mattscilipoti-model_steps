@@ -600,10 +600,9 @@ end
 
 def map_table_headers(table)
 
-  returning(mappings = {}) do
-    table.headers.each do |header|
-      mappings[header] = map_table_header(header)
-    end
+  mappings = {}
+  table.headers.each do |header|
+    mappings[header] = map_table_header(header)
   end
 
   table.map_headers(mappings)
