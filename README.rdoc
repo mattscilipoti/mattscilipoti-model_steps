@@ -99,6 +99,10 @@ General:  a step that ends in colon (:) expects a cucumber table.
    bump version in a commit by itself I can ignore when I pull)
 * Send me a pull request. Bonus points for topic branches.
 
+== Thanks for your help and patches!
+
+ccahoon, ngauthier
+
 == Copyright
 
 Copyright (c) 2009-10 Matt Scilipoti. See LICENSE for details.
