@@ -1,3 +1,5 @@
+require 'chronic'
+
 Cucumber::Ast::Table.class_eval do
   def is_date_column?(column_name)
     column_name =~ /( at|_at|time|date)$/i

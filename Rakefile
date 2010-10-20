@@ -10,7 +10,8 @@ begin
     gem.email = "matt@scilipoti.name"
     gem.homepage = "http://github.com/mattscilipoti/mattscilipoti-model_steps"
     gem.authors = ["Matt Scilipoti", "Chris Cahoon"]
-    gem.add_runtime_dependency "friendly_id", '> 3.0'
+    gem.add_runtime_dependency "friendly_id", '~> 3.0'
+    gem.add_runtime_dependency "chronic", '~> 0.2'
     gem.add_development_dependency "micronaut"
     gem.add_development_dependency "cucumber"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
