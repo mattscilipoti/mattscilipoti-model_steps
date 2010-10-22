@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'chronic'
 
 Cucumber::Ast::Table.class_eval do
@@ -45,7 +46,7 @@ end
 
 Then /^I should see (\d+) (\D+)$/ do |expected_count, requested_model|
   expected_count = expected_count.to_i
-  css_class = requested_model.underscore
+  css_class = css_classify(requested_model)
   if expected_count > 0
     response.should have_tag("table.#{css_class}") do
       with_tag("tbody tr", expected_count)
@@ -67,7 +68,7 @@ Then /^I should see (?:these|this|the following) (\D+):$/ do |requested_model, t
 
   requested_table = (requested_model =~ /^(.+)[(](.+)[)]$/) ? $1 : requested_model
 
-  css_class = requested_table.pluralize.underscore
+  css_class = css_classify(requested_table)
 
   #TODO: yell if table does not exist
   html_table = table(tableish("table.#{css_class} tr", 'td,th'))
@@ -706,6 +707,9 @@ def requested_model_to_model(requested_model)
   raise "Requested Model (#{requested_model}, as #{possible_model_name}) is not supported."
 end
 
+def css_classify(requested_model)
+  requested_model.pluralize.parameterize.underscore
+end
 
 def requested_params_to_model_params(requested_params, model)
   converted_params = {}

@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Matt Scilipoti", "Chris Cahoon"]
-  s.date = %q{2010-10-20}
+  s.date = %q{2010-10-22}
   s.description = %q{Step Definitions for cucumber which support ActiveRecord Models}
   s.email = %q{matt@scilipoti.name}
   s.extra_rdoc_files = [
@@ -31,7 +31,8 @@ Gem::Specification.new do |s|
      "lib/mattscilipoti-model_steps.rb",
      "lib/model_steps/step_definitions.rb",
      "mattscilipoti-model_steps-0.3.4.gem",
-     "mattscilipoti-model_steps.gemspec"
+     "mattscilipoti-model_steps.gemspec",
+     "test/test_step_definition.rb"
   ]
   s.homepage = %q{http://github.com/mattscilipoti/mattscilipoti-model_steps}
   s.rdoc_options = ["--charset=UTF-8"]
@@ -39,7 +40,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.7}
   s.summary = %q{Model Steps for cucumber}
   s.test_files = [
-    "examples/example_helper.rb",
+    "test/test_step_definition.rb",
+     "examples/example_helper.rb",
      "examples/mattscilipoti-model_steps_example.rb"
   ]
 
@@ -49,18 +51,18 @@ Gem::Specification.new do |s|
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<friendly_id>, ["~> 3.0"])
-      s.add_runtime_dependency(%q<chronic>, ["~> 0.2"])
+      s.add_runtime_dependency(%q<aaronh-chronic>, ["~> 0.3.9"])
       s.add_development_dependency(%q<micronaut>, [">= 0"])
       s.add_development_dependency(%q<cucumber>, [">= 0"])
     else
       s.add_dependency(%q<friendly_id>, ["~> 3.0"])
-      s.add_dependency(%q<chronic>, ["~> 0.2"])
+      s.add_dependency(%q<aaronh-chronic>, ["~> 0.3.9"])
       s.add_dependency(%q<micronaut>, [">= 0"])
       s.add_dependency(%q<cucumber>, [">= 0"])
     end
   else
     s.add_dependency(%q<friendly_id>, ["~> 3.0"])
-    s.add_dependency(%q<chronic>, ["~> 0.2"])
+    s.add_dependency(%q<aaronh-chronic>, ["~> 0.3.9"])
     s.add_dependency(%q<micronaut>, [">= 0"])
     s.add_dependency(%q<cucumber>, [">= 0"])
   end
