@@ -24,7 +24,7 @@ Cucumber::Ast::Table.class_eval do
       else
         parsed_value = Chronic.parse(cell_value)
         raise "Chronic can not parse '#{cell_value}' to a date/time." unless parsed_value
-        parsed_value.to_s
+        parsed_value
       end
     end
   end
