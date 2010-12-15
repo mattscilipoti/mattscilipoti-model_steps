@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{mattscilipoti-model_steps}
-  s.version = "0.3.6"
+  s.version = "0.3.7"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Matt Scilipoti", "Chris Cahoon"]
-  s.date = %q{2010-10-22}
+  s.date = %q{2010-12-15}
   s.description = %q{Step Definitions for cucumber which support ActiveRecord Models}
   s.email = %q{matt@scilipoti.name}
   s.extra_rdoc_files = [
