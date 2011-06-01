@@ -2,7 +2,7 @@ require 'rubygems'
 require 'bundler/setup'
 gem 'minitest'
 require 'minitest/autorun'
-require 'minitest/pride'
+# require 'minitest/pride'
 require 'timecop'
 
 require File.expand_path("../lib/cucumber_ast_table.rb", File.dirname(__FILE__))
