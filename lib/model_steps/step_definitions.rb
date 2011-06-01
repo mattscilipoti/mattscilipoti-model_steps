@@ -1,5 +1,7 @@
 require 'rubygems'
 require 'chronic'
+require 'cucumber'
+require 'cucumber/ast/table'
 
 Cucumber::Ast::Table.class_eval do
   def is_date_column?(column_name)

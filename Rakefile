@@ -21,20 +21,6 @@ rescue LoadError
   puts "Jeweler (or a dependency) not available. Install it with: sudo gem install jeweler"
 end
 
-require 'micronaut/rake_task'
-Micronaut::RakeTask.new(:examples) do |examples|
-  examples.pattern = 'examples/**/*_example.rb'
-  examples.ruby_opts << '-Ilib -Iexamples'
-end
-
-Micronaut::RakeTask.new(:rcov) do |examples|
-  examples.pattern = 'examples/**/*_example.rb'
-  examples.rcov_opts = '-Ilib -Iexamples'
-  examples.rcov = true
-end
-
-task :examples => :check_dependencies
-
 begin
   require 'cucumber/rake/task'
   Cucumber::Rake::Task.new(:features)
@@ -46,7 +32,14 @@ rescue LoadError
   end
 end
 
-task :default => :examples
+
+require 'rake/testtask'
+
+Rake::TestTask.new do |t|
+  t.pattern = "test/*_spec.rb"
+end
+task :default => :test
+
 
 require 'rake/rdoctask'
 Rake::RDocTask.new do |rdoc|
