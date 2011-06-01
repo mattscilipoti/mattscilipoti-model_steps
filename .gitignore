@@ -1,3 +1,6 @@
+# don't commit Gemfile.lock for gems.
+Gemfile.lock
+
 *.sw?
 .DS_Store
 
