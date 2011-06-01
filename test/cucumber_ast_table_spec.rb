@@ -5,7 +5,7 @@ require 'minitest/autorun'
 # require 'minitest/pride'
 require 'timecop'
 
-require File.expand_path("../lib/cucumber_ast_table.rb", File.dirname(__FILE__))
+require 'model_steps/cucumber_ast_table'
 
 module Cucumber::Ast
   describe Table do
