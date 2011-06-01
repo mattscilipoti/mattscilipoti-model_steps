@@ -54,7 +54,7 @@ Gem::Specification.new do |s|
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
       s.add_runtime_dependency(%q<activesupport>, [">= 2.1.0"])
       s.add_runtime_dependency(%q<aaronh-chronic>, ["~> 0.3.9"])
-      s.add_runtime_dependency(%q<cucumber>, ["~> 0.9.4"])
+      s.add_runtime_dependency(%q<cucumber>, ["~> 0.10"])
       s.add_runtime_dependency(%q<friendly_id>, ["~> 3.0"])
       s.add_runtime_dependency(%q<i18n>, [">= 0"])
       s.add_development_dependency(%q<jeweler>, [">= 0"])
@@ -63,7 +63,7 @@ Gem::Specification.new do |s|
     else
       s.add_dependency(%q<activesupport>, [">= 2.1.0"])
       s.add_dependency(%q<aaronh-chronic>, ["~> 0.3.9"])
-      s.add_dependency(%q<cucumber>, ["~> 0.9.4"])
+      s.add_dependency(%q<cucumber>, ["~> 0.10"])
       s.add_dependency(%q<friendly_id>, ["~> 3.0"])
       s.add_dependency(%q<i18n>, [">= 0"])
       s.add_dependency(%q<jeweler>, [">= 0"])
@@ -73,7 +73,7 @@ Gem::Specification.new do |s|
   else
     s.add_dependency(%q<activesupport>, [">= 2.1.0"])
     s.add_dependency(%q<aaronh-chronic>, ["~> 0.3.9"])
-    s.add_dependency(%q<cucumber>, ["~> 0.9.4"])
+    s.add_dependency(%q<cucumber>, ["~> 0.10"])
     s.add_dependency(%q<friendly_id>, ["~> 3.0"])
     s.add_dependency(%q<i18n>, [">= 0"])
     s.add_dependency(%q<jeweler>, [">= 0"])
