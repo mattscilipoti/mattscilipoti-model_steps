@@ -127,11 +127,11 @@ end
 # Finds the ModelB's which match the conditions
 #  And assigns themto ModelA.association
 Given /^(\D+):(.+) has (?:these|this|the following) existing (\D+):$/ do |requested_model, default_identifier, requested_association_name, table|
-  association_quantity = table.rows.size
-
   map_table_columns!(table)
   array_of_requested_params = table.hashes
   model_under_test = requested_model_with_identifier_to_model_instance(requested_model, default_identifier)
+
+  association_quantity = table.rows.size
   assign_requested_model_associations(model_under_test, association_quantity, requested_association_name, array_of_requested_params)
 end
 
@@ -142,11 +142,11 @@ end
 Given /^(.+):(.+) (?:has|had) (?:these|this|the following) (?!existing |attributes)(.+)?:$/ do |requested_model, default_identifier, requested_association_name, table|
   #needs negative look behind (?!existing) for "has these existing ModelBs
   #needs negative look behind (?!existing|attributes) AND optional (.+)? for "has these attributes"
-  association_quantity = table.rows.size
-
   map_table_columns!(table)
   array_of_requested_params = table.hashes
   model_under_test = requested_model_with_identifier_to_model_instance(requested_model, default_identifier)
+
+  association_quantity = table.rows.size
   create_requested_model_associations(model_under_test, association_quantity, requested_association_name, array_of_requested_params)
 end
 
